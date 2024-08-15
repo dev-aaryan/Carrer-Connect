@@ -2,11 +2,11 @@
 The Carrer Connect Application is a web-based platform designed to connect job seekers with potential employers. The application provides two roles: Recruiter and User, each with distinct functionalities. Users can search, and apply for various job opportunities, while Recruiter manage job postings and oversee user activities.
 
 ## Some Images:
-<img src="https://drive.google.com/file/d/1M7Jvh2sAhHzaQytZJfCdxiUJqCA2Q3gE/view?usp=sharing"/>
-<img src="https://drive.google.com/file/d/1bej5cUkqLwsTauXlzIUWIiMAPJ3yPloU/view?usp=sharing"/>
-<img src="https://drive.google.com/file/d/1g5B6XzUXFSqIk-VMJsP1J--h9g7mBbwm/view?usp=sharing"/>
-<img src="https://drive.google.com/file/d/1dhbVmnZNE4WVgwXx2oA9VfRDU9idNdAS/view?usp=sharing"/>
-<img src="https://drive.google.com/file/d/1JrUwF9MrGfx6UJuHV4WWkiKgxpPzvHNa/view?usp=sharing"/>
+<img src="https://drive.google.com/uc?export=view&id=1M7Jvh2sAhHzaQytZJfCdxiUJqCA2Q3gE"/>
+<img src="https://drive.google.com/uc?export=view&id=1bej5cUkqLwsTauXlzIUWIiMAPJ3yPloU" />
+<img src="https://drive.google.com/uc?export=view&id=1g5B6XzUXFSqIk-VMJsP1J--h9g7mBbwm" />
+<img src="https://drive.google.com/uc?export=view&id=1dhbVmnZNE4WVgwXx2oA9VfRDU9idNdAS" />
+<img src="https://drive.google.com/uc?export=view&id=1JrUwF9MrGfx6UJuHV4WWkiKgxpPzvHNa" />
 
 ## Table of Contents
 - [Features](#Features)
@@ -44,8 +44,8 @@ The Carrer Connect Application is a web-based platform designed to connect job s
 ## Installation
 To run this portfolio locally, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/aaryan-gupta03/carrer-portal.git`
-2. Navigate to the project directory: `cd carrer-portal`
+1. Clone the repository: `git clone https://github.com/dev-aaryan/Carrer-Connect.git`
+2. Navigate to the project directory: `cd Carrer-Connect`
 3. Install the dependencies: `npm install`
 4. Start the development server: `npm run dev`
 5. Open your browser and visit: `http://localhost:3000`
