@@ -11,6 +11,7 @@ import CompanyCreate from './components/admin/CompanyCreate'
 import CompanySetup from './components/admin/CompanySetup'
 import AdminJobs from "./components/admin/AdminJobs";
 import PostJob from './components/admin/PostJob'
+import JobSetup from './components/admin/JobSetup'
 import Applicants from './components/admin/Applicants'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
@@ -33,6 +34,7 @@ function App() {
         <Route path='/admin/companies/:id' element={<ProtectedRoute><CompanySetup /></ProtectedRoute>} />
         <Route path='/admin/jobs' element={<ProtectedRoute><AdminJobs /></ProtectedRoute>} />
         <Route path='/admin/jobs/create' element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
+        <Route path='/admin/jobs/update/:id' element={<ProtectedRoute><JobSetup /></ProtectedRoute>} />
         <Route path='/admin/jobs/:id/applicants' element={<ProtectedRoute><Applicants /></ProtectedRoute>} />
       </Routes>
       </BrowserRouter>

@@ -34,6 +34,56 @@ export const postJob = async (req, res) => {
         console.log(error);
     }
 }
+
+// admin update krega job
+export const updateJob = async (req, res) => {
+    try {
+        const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
+        const { id } = req.params;
+
+        if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
+            return res.status(400).json({
+                message: "Somethin is missing.",
+                success: false
+            })
+        };
+        
+        const updatedJob = await Job.findByIdAndUpdate(
+            id,
+            {
+            title,
+            description,
+            requirements: requirements.split(","),
+            salary: Number(salary),
+            location,
+            jobType,
+            experienceLevel: experience,
+            position,
+            company: companyId,
+            },
+            { new: true }
+        );
+
+        if (!updatedJob) {
+            return res.status(404).json({
+                message: "Job not found.",
+                success: false
+            });
+        }
+
+        return res.status(200).json({
+            message: "Job updated successfully.",
+            job: updatedJob,
+            success: true
+        });
+    } catch (error) {
+         console.error("Update Job Error:", error);
+         return res.status(500).json({
+        message: "Internal server error.",
+        success: false
+    });
+    }
+}
 // student k liye
 export const getAllJobs = async (req, res) => {
     try {

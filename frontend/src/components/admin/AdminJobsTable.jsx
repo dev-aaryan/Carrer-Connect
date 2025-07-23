@@ -36,7 +36,7 @@ const AdminJobsTable = () => {
                 <TableBody>
                     {
                         filterJobs?.map((job) => (
-                            <tr>
+                            <tr key={job._id}>
                                 <TableCell>{job?.company?.name}</TableCell>
                                 <TableCell>{job?.title}</TableCell>
                                 <TableCell>{job?.createdAt.split("T")[0]}</TableCell>
@@ -44,7 +44,7 @@ const AdminJobsTable = () => {
                                     <Popover>
                                         <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
                                         <PopoverContent className="w-32">
-                                            <div onClick={()=> navigate(`/admin/companies/${job._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
+                                            <div onClick={()=> navigate(`/admin/jobs/update/${job._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
                                                 <Edit2 className='w-4' />
                                                 <span>Edit</span>
                                             </div>
