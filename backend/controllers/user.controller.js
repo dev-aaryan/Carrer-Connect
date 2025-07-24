@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 
-// ✅ REGISTER CONTROLLER
 export const register = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, password, role } = req.body;
@@ -16,16 +15,23 @@ export const register = async (req, res) => {
             });
         }
 
-        const file = req.file;
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-
-        const user = await User.findOne({ email });
-        if (user) {
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
             return res.status(400).json({
                 message: 'User already exists with this email.',
                 success: false
             });
+        }
+
+        const defaultProfilePic = "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg";
+        let profilePhoto = defaultProfilePic;
+
+        const file = req.file;
+        if (file) {
+            const fileUri = getDataUri(file);
+            const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+            profilePhoto = cloudResponse.secure_url;
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,7 +43,7 @@ export const register = async (req, res) => {
             password: hashedPassword,
             role,
             profile: {
-                profilePhoto: cloudResponse.secure_url
+                profilePhoto
             }
         });
 
@@ -56,7 +62,6 @@ export const register = async (req, res) => {
             profile: newUser.profile
         };
 
-        // ✅ Set cookie with proper flags
         return res.status(200)
             .cookie("token", token, {
                 maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
@@ -69,13 +74,14 @@ export const register = async (req, res) => {
                 user: userResponse,
                 success: true
             });
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Server error", success: false });
     }
 };
 
-// ✅ LOGIN CONTROLLER
+
 export const login = async (req, res) => {
     try {
         const { email, password, role } = req.body;
@@ -125,7 +131,6 @@ export const login = async (req, res) => {
             profile: user.profile
         };
 
-        // ✅ Set cookie with proper flags
         return res.status(200)
             .cookie("token", token, {
                 maxAge: 1 * 24 * 60 * 60 * 1000,
@@ -144,7 +149,6 @@ export const login = async (req, res) => {
     }
 };
 
-// ✅ LOGOUT CONTROLLER
 export const logout = async (req, res) => {
     try {
         return res.status(200)
@@ -164,7 +168,6 @@ export const logout = async (req, res) => {
     }
 };
 
-// ✅ UPDATE PROFILE CONTROLLER (no cookie changes needed)
 export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
