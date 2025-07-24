@@ -9,6 +9,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useSelector } from 'react-redux'
 import useGetCompanyById from '@/hooks/useGetCompanyById'
+import { setCompanies } from "../../redux/companySlice";
+import { useDispatch } from 'react-redux'
 
 const CompanySetup = () => {
     const params = useParams();
@@ -23,6 +25,7 @@ const CompanySetup = () => {
     const {singleCompany} = useSelector(store=>store.company);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -48,10 +51,17 @@ const CompanySetup = () => {
                 headers: {'Content-Type': 'multipart/form-data'},withCredentials: true
             });
              
+            if(res.data.success){
+            const companyRes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/company/get`, {withCredentials: true,});
+            
+            if (companyRes.data.success)
+            dispatch(setCompanies(companyRes.data.companies)); // update the Redux store
+            
             if (res.data.success) {
                 toast.success(res.data.message);
                 navigate("/admin/companies");
             }
+        }
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message);

@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoading } from '@/redux/authSlice'
+import { setLoading, setUser } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
 
 const Signup = () => {
@@ -39,18 +39,24 @@ const Signup = () => {
         try {
             dispatch(setLoading(true));
 
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/v1/user/register`, formData, {
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/register`, formData, {
                 headers: { 'Content-Type': "multipart/form-data" },
                 withCredentials: true,  // send cookies
             });
 
             if (res.data.success) {
-                navigate("/login");
+                dispatch(setUser(res.data.user));
+                navigate("/");
                 toast.success(res.data.message);
             }
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.data && error.response.data.message) {
             toast.error(error.response.data.message);
+            } else if (error.message) {
+            toast.error(error.message);
+            } else {
+            toast.error("Signup failed. Please try again.");
+        }
         } finally{
             dispatch(setLoading(false));
         }

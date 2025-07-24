@@ -17,7 +17,8 @@ const AdminJobsTable = () => {
             };
             return job?.title?.toLowerCase().includes(searchJobByText.toLowerCase()) || job?.company?.name.toLowerCase().includes(searchJobByText.toLowerCase());
 
-        });
+        })
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // 🔥 Sort by latest;
         setFilterJobs(filteredJobs);
     },[allAdminJobs,searchJobByText])
     

@@ -17,7 +17,8 @@ const CompaniesTable = () => {
             };
             return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
 
-        });
+        })
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setFilterCompany(filteredCompany);
     },[companies,searchCompanyByText])
 

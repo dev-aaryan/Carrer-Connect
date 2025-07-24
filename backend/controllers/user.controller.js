@@ -28,7 +28,7 @@ export const register = async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await User.create({
+        const newUser = await User.create({
             fullname,
             email,
             phoneNumber,
@@ -39,9 +39,25 @@ export const register = async (req, res) => {
             }
         });
 
-        return res.status(201).json({
-            message: "Account created successfully.",
-            success: true
+        const tokenData = {
+            userId: newUser._id
+        };
+        const token = jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
+
+        // Prepare user details for response (avoid sending password)
+        const userResponse = {
+            _id: newUser._id,
+            fullname: newUser.fullname,
+            email: newUser.email,
+            phoneNumber: newUser.phoneNumber,
+            role: newUser.role,
+            profile: newUser.profile
+        };
+
+        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, sameSite: 'strict' }).json({
+        message: `Account created successfully. ${newUser.fullname}`,
+        user: userResponse,
+        success: true
         });
     } catch (error) {
         console.log(error);

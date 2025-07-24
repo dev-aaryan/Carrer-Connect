@@ -12,13 +12,17 @@ const JobDescription = () => {
     const {user} = useSelector(store=>store.auth);
     const isIntiallyApplied = singleJob?.applications?.some(application => application.applicant === user?._id) || false;
     const [isApplied, setIsApplied] = useState(isIntiallyApplied);
-
+    
     const params = useParams();
     const jobId = params.id;
     const dispatch = useDispatch();
 
     const applyJobHandler = async () => {
         try {
+            if (!user) {
+            toast.error("Please login to apply for jobs.");
+             return;
+            } 
             const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/application/apply/${jobId}`, {withCredentials:true});
             
             if(res.data.success){
@@ -42,7 +46,7 @@ const JobDescription = () => {
                     dispatch(setSingleJob(res.data.job));
                     setIsApplied(res.data.job.applications.some(application=>application.applicant === user?._id)) // Ensure the state is in sync with fetched data
                 }
-            } catch (error) {
+            } catch (error) {  
                 console.log(error);
             }
         }

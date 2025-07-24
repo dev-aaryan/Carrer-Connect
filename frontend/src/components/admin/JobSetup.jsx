@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setAllJobs } from "../../redux/jobSlice";
 import { Loader2 } from 'lucide-react'
 
 const JobSetup = () => {
@@ -24,6 +26,7 @@ const JobSetup = () => {
     });
     const [loading, setLoading]= useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { id } = useParams();
 
     const { companies } = useSelector(store => store.company);
@@ -43,11 +46,18 @@ const JobSetup = () => {
             const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/job/updatejob/${id}`, input,{
                 headers:{'Content-Type':'application/json'},withCredentials:true
             });
+
+             if(res.data.success){
+            const jobsRes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get`, {withCredentials: true,});
+            
+            if (jobsRes.data.success)
+            dispatch(setAllJobs(jobsRes.data.jobs)); // update the Redux store
             
             if(res.data.success){
                 toast.success(res.data.message);
                 navigate("/admin/jobs");
             }
+        } 
         } catch (error) {
             toast.error(error.response.data.message);
         } finally{

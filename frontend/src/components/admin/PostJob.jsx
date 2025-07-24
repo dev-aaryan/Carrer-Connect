@@ -9,6 +9,9 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
+import { useDispatch } from 'react-redux'
+import { setAllJobs } from "../../redux/jobSlice";
+
 
 const PostJob = () => {
     const [input, setInput] = useState({
@@ -24,6 +27,7 @@ const PostJob = () => {
     });
     const [loading, setLoading]= useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const { companies } = useSelector(store => store.company);
     const changeEventHandler = (e) => {
@@ -44,10 +48,16 @@ const PostJob = () => {
             });
             
             if(res.data.success){
+            const jobsRes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get`, {withCredentials: true,});
+
+            if (jobsRes.data.success)
+                dispatch(setAllJobs(jobsRes.data.jobs)); // update the Redux store
+            
                 toast.success(res.data.message);
                 navigate("/admin/jobs");
             }
         } catch (error) {
+            console.log(error);
             toast.error(error.response.data.message);
         } finally{
             setLoading(false);
